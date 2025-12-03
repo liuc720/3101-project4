@@ -1,6 +1,6 @@
-// ========== 配置 ==========
-const GRID_SIZE = 50; // 50x50 格子 (500x500 太多会卡,先用 50x50)
-const CELL_SIZE = 12; // 每个格子 12px
+// 配置
+const GRID_SIZE = 50; // 50x50
+const CELL_SIZE = 12; // 12px
 const CANVAS_SIZE = GRID_SIZE * CELL_SIZE; // 600px
 
 // 调色板颜色
@@ -13,7 +13,7 @@ const PALETTE_COLORS = [
   '#556B2F', '#FF8C00', '#9932CC', '#8B0000', '#E9967A', '#8FBC8F'
 ];
 
-// ========== 状态管理 ==========
+// 状态管理
 let ws = null;
 let canvas = null;
 let ctx = null;
@@ -26,12 +26,12 @@ let hoveredCell = null;
 let isMouseDown = false; // 追踪鼠标按下状态
 let lastDrawnCell = null; // 避免重复绘制同一格子
 
-// Undo/Redo 历史记录
+// Undo/Redo
 let history = [];
 let historyIndex = -1;
 const MAX_HISTORY = 50; // 最多保存50步
 
-// ========== 初始化 ==========
+// 初始化
 document.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
   roomId = urlParams.get('room');
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   connectWebSocket();
 });
 
-// ========== 画布初始化 ==========
+// 画布初始化
 function initCanvas() {
   canvas = document.getElementById('pixelCanvas');
   canvas.width = CANVAS_SIZE;
@@ -78,14 +78,12 @@ function drawGrid() {
         ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE);
       }
       
-      // 绘制格子边框
       ctx.strokeStyle = '#e0e0e0';
       ctx.lineWidth = 1;
       ctx.strokeRect(x, y, CELL_SIZE, CELL_SIZE);
     }
   }
   
-  // 高亮悬停的格子
   if (hoveredCell) {
     const { row, col } = hoveredCell;
     const x = col * CELL_SIZE;
@@ -97,7 +95,7 @@ function drawGrid() {
   }
 }
 
-// ========== 调色板初始化 ==========
+// 调色板初始化
 function initColorPalette() {
   const palette = document.getElementById('colorPalette');
   
@@ -125,18 +123,16 @@ function selectColor(color, btn = null) {
   if (btn) btn.classList.add('active');
 }
 
-// ========== 事件监听 ==========
 function initEventListeners() {
-  // 鼠标事件
+  // 鼠标
   canvas.addEventListener('mousedown', handleMouseDown);
   canvas.addEventListener('mousemove', handleMouseMove);
   canvas.addEventListener('mouseup', handleMouseUp);
   canvas.addEventListener('mouseleave', handleMouseLeave);
   
-  // 全局鼠标释放事件(防止在canvas外释放)
   document.addEventListener('mouseup', handleMouseUp);
   
-  // 工具选择
+  // 工具
   document.querySelectorAll('.tool-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       currentTool = btn.dataset.tool;
@@ -153,11 +149,11 @@ function initEventListeners() {
     });
   });
   
-  // Undo/Redo 按钮
+  // Undo/Redo
   document.getElementById('undoBtn').addEventListener('click', undo);
   document.getElementById('redoBtn').addEventListener('click', redo);
   
-  // 键盘快捷键 Ctrl+Z / Ctrl+Y
+  // Ctrl+Z / Ctrl+Y
   document.addEventListener('keydown', (e) => {
     if (e.ctrlKey || e.metaKey) {
       if (e.key === 'z') {
@@ -178,11 +174,10 @@ function initEventListeners() {
   document.getElementById('zoomOut').addEventListener('click', () => zoomCanvas(0.8));
   document.getElementById('zoomReset').addEventListener('click', () => zoomCanvas(1, true));
   
-  // 更新 Undo/Redo 按钮状态
   updateUndoRedoButtons();
 }
 
-// ========== 画布交互 ==========
+// 画布交互
 function handleMouseDown(e) {
   isMouseDown = true;
   lastDrawnCell = null;
@@ -328,7 +323,7 @@ function performClear() {
   addActivity('Canvas cleared');
 }
 
-// ========== Undo/Redo 功能 ==========
+// Undo/Redo 功能
 function saveHistory() {
   // 如果当前不在历史记录末尾,删除后面的记录
   if (historyIndex < history.length - 1) {
@@ -441,7 +436,7 @@ function leaveRoom() {
   }
 }
 
-// ========== WebSocket ==========
+// WebSocket
 function connectWebSocket() {
   // 连接到 Render 后端服务器
   const wsUrl = 'wss://three101-project4-7cru.onrender.com';
@@ -489,7 +484,6 @@ function handleWebSocketMessage(data) {
   switch(data.type) {
     case 'init':
       gridData = data.canvas;
-      // 初始化时保存第一个历史记录
       history = [gridData.map(row => [...row])];
       historyIndex = 0;
       updateUndoRedoButtons();
@@ -529,7 +523,7 @@ function handleWebSocketMessage(data) {
   }
 }
 
-// ========== UI 更新 ==========
+// UI 更新
 function updateConnectionStatus(status) {
   const statusEl = document.getElementById('connectionStatus');
   statusEl.className = 'status-badge ' + status;
