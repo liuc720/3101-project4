@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixel Collaboration - Join Room</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="join-box">
+      <h1>🎨 Pixel Collaboration</h1>
+      <p class="subtitle">Create pixel art together in real-time</p>
+      
+      <div class="form-group">
+        <label for="username">Your Name</label>
+        <input type="text" id="username" placeholder="Enter your name" maxlength="20">
+      </div>
+      
+      <div class="form-group">
+        <label for="roomId">Room Code</label>
+        <input type="text" id="roomId" placeholder="Enter room code or leave empty" maxlength="10">
+      </div>
+      
+      <button id="joinBtn" class="primary-btn">Join Room</button>
+      <button id="randomBtn" class="secondary-btn">Create Random Room</button>
+      
+      <div class="info-box">
+        <h3>ℹ️ How it works</h3>
+        <ul>
+          <li>Enter a room code or create a random one</li>
+          <li>Share the code with a friend</li>
+          <li>Draw together on a 500x500 pixel canvas</li>
+          <li>Only 2 people per room</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const usernameInput = document.getElementById('username');
+    const roomIdInput = document.getElementById('roomId');
+    const joinBtn = document.getElementById('joinBtn');
+    const randomBtn = document.getElementById('randomBtn');
+
+    // 生成随机房间ID
+    function generateRoomId() {
+      return Math.random().toString(36).substring(2, 8).toUpperCase();
+    }
+
+    // 加入房间
+    function joinRoom(roomId, username) {
+      if (!username.trim()) {
+        alert('Please enter your name!');
+        return;
+      }
+      
+      if (!roomId.trim()) {
+        alert('Please enter a room code or create a random room!');
+        return;
+      }
+      
+      // 保存到 localStorage
+      localStorage.setItem('username', username);
+      localStorage.setItem('roomId', roomId);
+      
+      // 跳转到画布页面
+      window.location.href = `canvas.html?room=${roomId}&user=${encodeURIComponent(username)}`;
+    }
+
+    // 加载上次的用户名
+    const savedUsername = localStorage.getItem('username');
+    if (savedUsername) {
+      usernameInput.value = savedUsername;
+    }
+
+    joinBtn.addEventListener('click', () => {
+      const username = usernameInput.value;
+      const roomId = roomIdInput.value || generateRoomId();
+      joinRoom(roomId, username);
+    });
+
+    randomBtn.addEventListener('click', () => {
+      const username = usernameInput.value;
+      const roomId = generateRoomId();
+      roomIdInput.value = roomId;
+      joinRoom(roomId, username);
+    });
+
+    // 回车键加入
+    roomIdInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        joinBtn.click();
+      }
+    });
+
+    usernameInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        roomIdInput.focus();
+      }
+    });
+  </script>
+</body>
+</html>

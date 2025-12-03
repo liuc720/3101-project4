@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixel Collaboration - Canvas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="canvas-page">
+  <div class="header">
+    <div class="header-left">
+      <h2>🎨 Pixel Canvas</h2>
+      <div class="room-info">
+        <span id="roomCode">Room: Loading...</span>
+        <span id="userCount">👤 0/2</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <button id="undoBtn" class="icon-btn" title="Undo">↶</button>
+      <button id="redoBtn" class="icon-btn" title="Redo">↷</button>
+      <button id="clearBtn" class="icon-btn" title="Clear Canvas">🗑️</button>
+      <button id="exportBtn" class="icon-btn" title="Export as PNG">💾</button>
+      <button id="leaveBtn" class="icon-btn danger" title="Leave Room">🚪</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="sidebar">
+      <h3>Color Palette</h3>
+      <div class="color-palette" id="colorPalette"></div>
+      
+      <div class="current-color-container">
+        <h3>Current Color</h3>
+        <div class="current-color-display">
+          <div id="currentColorPreview" class="color-preview"></div>
+          <input type="color" id="customColor" value="#000000">
+        </div>
+      </div>
+
+      <div class="tool-container">
+        <h3>Tools</h3>
+        <div class="tool-options">
+          <button class="tool-btn active" data-tool="draw">✏️ Draw</button>
+          <button class="tool-btn" data-tool="erase">🧹 Eraser</button>
+          <button class="tool-btn" data-tool="fill">🪣 Fill</button>
+        </div>
+      </div>
+
+      <div class="status-container">
+        <h3>Status</h3>
+        <div id="connectionStatus" class="status-badge">Connecting...</div>
+        <div id="activityLog" class="activity-log"></div>
+      </div>
+    </div>
+
+    <div class="canvas-container">
+      <div class="canvas-wrapper">
+        <canvas id="pixelCanvas" width="500" height="500"></canvas>
+        <div id="cursorOverlay"></div>
+      </div>
+      <div class="zoom-controls">
+        <button id="zoomOut">-</button>
+        <span id="zoomLevel">100%</span>
+        <button id="zoomIn">+</button>
+        <button id="zoomReset">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
