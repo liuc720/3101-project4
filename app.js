@@ -443,8 +443,8 @@ function leaveRoom() {
 
 // ========== WebSocket ==========
 function connectWebSocket() {
-  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-  const wsUrl = `${protocol}//${window.location.host}`;
+  // 连接到 Render 后端服务器
+  const wsUrl = 'wss://three101-project4-7cru.onrender.com';
   
   ws = new WebSocket(wsUrl);
   
